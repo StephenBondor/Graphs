@@ -28,7 +28,18 @@ def main():
     graph.add_directed_edge('3', '5')
     graph.add_directed_edge('2', '3')
     graph.add_directed_edge('4', '6')
-    print(graph.vertices)
+
+    # graph.add_vertex('0')
+    # graph.add_vertex('1')
+    # graph.add_vertex('2')
+    # graph.add_vertex('3')
+    # graph.add_edge('0', '1')
+    # graph.add_edge('0', '3')
+    # print(graph.vertices)
+    graph.dft(1)
+    print("_____")
+    graph.dft_r(1)
+
 
 if __name__ == '__main__':
     # TODO - parse argv
