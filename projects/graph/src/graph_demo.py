@@ -36,9 +36,9 @@ def main():
     # graph.add_edge('0', '1')
     # graph.add_edge('0', '3')
     # print(graph.vertices)
-    graph.dft(1)
+    graph.dft('1')
     print("_____")
-    graph.dft_r(1)
+    graph.dft_r("1")
 
 
 if __name__ == '__main__':

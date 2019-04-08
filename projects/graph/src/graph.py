@@ -33,7 +33,7 @@ class Graph:
         q.put(starting_vertex_id)
 
         while q.qsize() >= 1:
-            v = str(q.get())
+            v = q.get()
             print(v)
             visited.add(v)
             for next_vert in self.vertices[v]:
@@ -43,10 +43,10 @@ class Graph:
     def dft(self, starting_vertex_id):
         visited = set()
         s = []
-        s.append(str(starting_vertex_id))
+        s.append(starting_vertex_id)
 
         while len(s) > 0:
-            v = str(s.pop())
+            v = s.pop()
             print(v)
             visited.add(v)
             for next_vert in self.vertices[v]:
@@ -57,12 +57,11 @@ class Graph:
         if visited == None:
             visited = set()
         print(starting_vertex_id)
-        visited.add(str(starting_vertex_id))
-        for next_vert in self.vertices[str(starting_vertex_id)]:
+        visited.add(starting_vertex_id)
+        for next_vert in self.vertices[starting_vertex_id]:
             if next_vert not in visited:
                 self.dft_r(next_vert, visited)
 
-# BFS returning shortest path:
-    # Instead of storing each vertex in the queue, store the PATH to that vertex
-    # When you dequeue, look at the last node
-    # When you enqueue, copy the path and append the neighbor node and enqueue the new path
+    def dfs(self, starting_vertex_id):
+        visited = []
+        s = [starting_vertex_id]
