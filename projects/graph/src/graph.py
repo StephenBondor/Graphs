@@ -27,44 +27,31 @@ class Graph:
         else:
             raise IndexError("That vertex does not exist")
 
-    # Implement the queue, and enqueue the starting Vertex ID
     def bft(self, starting_vertex_id):
-        # Create and empty queue
+        visited = set()
         q = queue.Queue()
         q.put(starting_vertex_id)
-        # Create a set to store vertices
-        visited = set()
-        # While the queue is not empty"
+
         while q.qsize() >= 1:
-            # Dequeue the first vertex
             v = str(q.get())
-            # If that vertex has not been visited:
-            # Mark it as visited
             print(v)
             visited.add(v)
-            # Add all of its neighbors to the back of the queue
             for next_vert in self.vertices[v]:
                 if next_vert not in visited:
                     q.put(next_vert)
 
     def dft(self, starting_vertex_id):
-        # Create an empty stack
+        visited = set()
         s = []
         s.append(str(starting_vertex_id))
-        # Create a set to store vertices
-        visited = set()
-        # While the stack is not empty"
+
         while len(s) > 0:
-            # Pop the first vertex
             v = str(s.pop())
-            # If that vertex has not been visited:
-            # Mark it as visited
             print(v)
             visited.add(v)
-            # Add all of its neighbors to the top of the stack
             for next_vert in self.vertices[v]:
-                if str(next_vert) not in visited:
-                    s.append(str(next_vert))
+                if next_vert not in visited:
+                    s.append(next_vert)
 
     def dft_r(self, starting_vertex_id, visited=None):
         if visited == None:
