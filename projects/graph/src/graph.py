@@ -34,23 +34,23 @@ class Graph:
 
         while q.qsize() >= 1:
             v = q.get()
-            print(v)
-            visited.add(v)
-            for next_vert in self.vertices[v]:
-                if next_vert not in visited:
-                    q.put(next_vert)
+            if v not in visited:
+                print(v)
+                visited.add(v)
+                for next_vert in self.vertices[v]:
+                    if next_vert not in visited:
+                        q.put(next_vert)
 
     def dft(self, starting_vertex_id):
-        visited = set()
-        s = []
-        s.append(starting_vertex_id)
+        visited = []
+        s = [starting_vertex_id]
 
         while len(s) > 0:
             v = s.pop()
-            print(v)
-            visited.add(v)
+            print("item: ", [v])
+            visited.append(v)
             for next_vert in self.vertices[v]:
-                if next_vert not in visited:
+                if next_vert not in visited and next_vert not in s:
                     s.append(next_vert)
 
     def dft_r(self, starting_vertex_id, visited=None):
