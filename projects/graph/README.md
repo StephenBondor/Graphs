@@ -166,7 +166,7 @@ accounting for this, finding the average would be twice as much as reality.
 2.b What is the average degree of separation between a user and those in his/her
 extended network?
 
-    the average length of the traversal path ie [1, 3, 6, 2] is 5.5 after 20+ runs with variance .198
+    the average length of the traversal path ie from 1 to 2: [1, 3, 6, 2] , is 5.5 after 20+ runs with variance .198
 
 ## 4. Stretch Goal
 
@@ -175,6 +175,11 @@ extended network?
    you could improve your friendship distribution model for more realistic
    results?
 
+    Use every person on earth 7,700,000,000 and use Dunbar's Number, 200
+    connections for each. What is the point of this question?
+
 2. If you followed the hints for part 1, your `populateGraph()` will run in
    O(n^2) time. Refactor your code to run in O(n) time. Are there any tradeoffs
    that come with this implementation?
+
+    A lot of console logs for a poor implementation of the previous code.
