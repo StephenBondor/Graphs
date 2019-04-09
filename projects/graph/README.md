@@ -182,4 +182,5 @@ extended network?
    O(n^2) time. Refactor your code to run in O(n) time. Are there any tradeoffs
    that come with this implementation?
 
-    A lot of console logs for a poor implementation of the previous code.
+    as the number of friendships approaches the number of users, the list runs
+    asymptotically long.

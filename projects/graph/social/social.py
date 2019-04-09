@@ -112,10 +112,10 @@ class SocialGraph:
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populateGraph(100000, 5)
+    sg.populateGraph(1000, 5)
     print("all friendsships: ", sg.friendships)
-    connections = sg.getAllSocialPaths(1)
-    totalLength = 0
+    # connections = sg.getAllSocialPaths(1)
+    # totalLength = 0
     # for path in connections.items():
     #     # print(path)
     #     totalLength = totalLength + len(path[1])
