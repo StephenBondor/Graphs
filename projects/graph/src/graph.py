@@ -27,11 +27,10 @@ class Graph:
         else:
             raise IndexError("That vertex does not exist")
 
-    def bft(self, starting_vertex_id):
+    def bft(self, start):
         visited = set()
         q = queue.Queue()
-        q.put(starting_vertex_id)
-
+        q.put(start)
         while q.qsize() >= 1:
             v = q.get()
             if v not in visited:
@@ -41,10 +40,31 @@ class Graph:
                     if next_vert not in visited:
                         q.put(next_vert)
 
-    def dft(self, starting_vertex_id):
+    def bfs(self, start, target):
+        queue = [[start]]
         visited = []
-        s = [starting_vertex_id]
+        if start == target:
+            print("same same")
+            return target
 
+        while queue:
+            path = queue.pop(0)
+            v = path[-1]
+            if v not in visited:
+                for next_vert in self.vertices[v]:
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    queue.append(new_path)
+                    if next_vert == target:
+                        print("shortest path:", new_path)
+                        return new_path
+                visited.append(v)
+        print("no path")
+        return None
+
+    def dft(self, start):
+        visited = []
+        s = [start]
         while len(s) > 0:
             v = s.pop()
             print("item: ", [v])
@@ -53,15 +73,43 @@ class Graph:
                 if next_vert not in visited and next_vert not in s:
                     s.append(next_vert)
 
-    def dft_r(self, starting_vertex_id, visited=None):
+    def dfs(self, start, target):
+        queue = [[start]]
+        visited = []
+        if start == target:
+            print("same same")
+            return target
+
+        while queue:
+            path = queue.pop()
+            v = path[-1]
+            if v not in visited:
+                for next_vert in self.vertices[v]:
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    queue.append(new_path)
+                    if next_vert == target:
+                        print("One of many paths:", new_path)
+                        return new_path
+                visited.append(v)
+        print("no path")
+        return None
+
+    def dft_r(self, start, visited=None):
         if visited == None:
             visited = set()
-        print(starting_vertex_id)
-        visited.add(starting_vertex_id)
-        for next_vert in self.vertices[starting_vertex_id]:
+        print(start)
+        visited.add(start)
+        for next_vert in self.vertices[start]:
             if next_vert not in visited:
                 self.dft_r(next_vert, visited)
 
-    def dfs(self, starting_vertex_id):
-        visited = []
-        s = [starting_vertex_id]
+    # def dfs_r(self, start, target, path=None):
+    #     if path == None:
+    #         path = []
+    #     path += [start]
+    #     print(start)
+    #     for next_vert in self.vertices[start]:
+    #         if next_vert not in path:
+    #             self.dfs_r(next_vert, path)
+    #     return path
