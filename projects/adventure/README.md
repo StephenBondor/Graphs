@@ -76,8 +76,9 @@ If all paths have been explored, you're done!
 It is very difficult to calculate the shortest possible path that traverses the
 entire graph. Why?
 
-Because it's n! or something. At large, p != np, and this problem is np
-complete. Meaning, essentially, that it's time complexity can not be reduced.
+Because it's n^n ... i think... or something. At large, p != np, and this
+problem is np complete. Meaning, essentially, that it's time complexity can not
+be reduced.
 
 My best path is 990 moves. Can you find a shorter path?
 
