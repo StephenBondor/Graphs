@@ -2,28 +2,22 @@ import random
 
 
 class MapGraph:
-    def __init__(self, currentRoom):  # populate what is known
-        self.connections, self.connections[currentRoom.id] = {}, {}
-        for out in currentRoom.getExits():
-            self.connections[currentRoom.id][out] = '?'
+    def __init__(self, room):  # populate what is known, cxn == connections
+        self.cxn, self.cxn[room.id] = {}, {}
+        for out in room.getExits():
+            self.cxn[room.id][out] = '?'
 
-    def flip(self, direction):  # Flip a direction
-        complement = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
-        return complement[direction]
-
-    def populate_known_areas(self, room, direction_moved, previous_room):
-        if room.id not in self.connections:  # populate new dict.'s
-            self.connections[room.id] = {}
-
-        for out in room.getExits():  # find and populate neighbors
-            if out not in self.connections[room.id].keys():
-                self.connections[room.id][out] = '?'
-
+    def populate_known_areas(self, room, move, previous_room):
+        if room.id not in self.cxn:
+            self.cxn[room.id] = {}  # create new room in connections
+        for out in room.getExits():  # find and populate neighbor exits
+            if out not in self.cxn[room.id].keys():
+                self.cxn[room.id][out] = '?'
         for out in previous_room.getExits():  # replace '?' with known numbers
-            if out == direction_moved:
-                self.connections[previous_room.id][out] = room.id
-                self.connections[room.id][self.flip(
-                    direction_moved)] = previous_room.id
+            if out == move:
+                self.cxn[previous_room.id][out] = room.id
+                self.cxn[room.id][{'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}[
+                    move]] = previous_room.id  # add reverse direction to previous room
 
     def path_to_next_q(self, room):  # Path like ['n', 'n'] to the closest ?
         visited, queue = [], [[{room.id: None}]]
@@ -31,11 +25,11 @@ class MapGraph:
             path = queue.pop(random.choice([0, len(queue)-1]))  # bfs or dfs
             address = list(path[-1].keys())[0]
             if address not in visited:
-                for news in self.connections[address]:
+                for news in self.cxn[address]:
                     new_path = list(path)
-                    new_path.append({self.connections[address][news]: news})
+                    new_path.append({self.cxn[address][news]: news})
                     queue.append(new_path)
-                    if self.connections[address][news] == '?':
+                    if self.cxn[address][news] == '?':
                         return [list(step.values())[0] for step in new_path[1:]]
                 visited.append(address)
         return False  # no '?'s left
