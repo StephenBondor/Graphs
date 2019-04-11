@@ -10,7 +10,7 @@ class MapGraph:
     def populate_known_areas(self, room, move, previous_room):
         if room.id not in self.cxn:
             self.cxn[room.id] = {}  # create new room in connections
-        for out in room.getExits():  # find and populate neighbor exits
+        for out in room.getExits():  # find and populate exits
             if out not in self.cxn[room.id].keys():
                 self.cxn[room.id][out] = '?'
         for out in previous_room.getExits():  # replace '?' with known numbers
