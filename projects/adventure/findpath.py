@@ -1,152 +1,54 @@
-class MapRoom:
-    def __init__(self, name):
-        self.name = name
+import random
 
 
-class TraversalGraph:
-    def __init__(self, player):
-        # Declarations
-        self.rooms = {}
-        self.connections = {}
+class MapGraph:
+    def __init__(self, currentRoom):  # populate what is known
+        self.connections, self.connections[currentRoom.id] = {}, {}
+        for out in currentRoom.getExits():
+            self.connections[currentRoom.id][out] = '?'
 
-        # populate initial values
-        self.rooms[player.currentRoom.id] = MapRoom(player.currentRoom.id)
-        self.connections[player.currentRoom.id] = {}
+    def flip(self, direction):  # Flip a direction
+        complement = {'n': 's', 's': 'n', 'e': 'w', 'w': 'e'}
+        return complement[direction]
 
-        # find current initial neighbors
-        exits = player.currentRoom.getExits()
-        if 'n' in exits:
-            self.connections[player.currentRoom.id]['n'] = '?'
-        if 's' in exits:
-            self.connections[player.currentRoom.id]['s'] = '?'
-        if 'e' in exits:
-            self.connections[player.currentRoom.id]['e'] = '?'
-        if 'w' in exits:
-            self.connections[player.currentRoom.id]['w'] = '?'
+    def populate_known_areas(self, room, direction_moved, previous_room):
+        if room.id not in self.connections:  # populate new dict.'s
+            self.connections[room.id] = {}
 
-    def populate_known_areas(self, player, direction_moved, previous_room):
+        for out in room.getExits():  # find and populate neighbors
+            if out not in self.connections[room.id].keys():
+                self.connections[room.id][out] = '?'
 
-        # populate new values
-        if player.currentRoom.id not in self.rooms:
-            self.rooms[player.currentRoom.id] = MapRoom(player.currentRoom.id)
-        if player.currentRoom.id not in self.connections:
-            self.connections[player.currentRoom.id] = {}
+        for out in previous_room.getExits():  # replace '?' with known numbers
+            if out == direction_moved:
+                self.connections[previous_room.id][out] = room.id
+                self.connections[room.id][self.flip(
+                    direction_moved)] = previous_room.id
 
-        # find and populate current initial neighbors
-        exits = player.currentRoom.getExits()
-        if 'n' in exits:
-            if 'n' not in self.connections[player.currentRoom.id].keys():
-                self.connections[player.currentRoom.id]['n'] = '?'
-        if 's' in exits:
-            if 's' not in self.connections[player.currentRoom.id].keys():
-                self.connections[player.currentRoom.id]['s'] = '?'
-        if 'e' in exits:
-            if 'e' not in self.connections[player.currentRoom.id].keys():
-                self.connections[player.currentRoom.id]['e'] = '?'
-        if 'w' in exits:
-            if 'w' not in self.connections[player.currentRoom.id].keys():
-                self.connections[player.currentRoom.id]['w'] = '?'
-
-        # fill in numbers on map
-        old_exits = previous_room.getExits()
-        if direction_moved == 'n' and 'n' in old_exits:
-            self.connections[previous_room.id]['n'] = player.currentRoom.id
-            self.connections[player.currentRoom.id]['s'] = previous_room.id
-        if direction_moved == 's' and 's' in old_exits:
-            self.connections[previous_room.id]['s'] = player.currentRoom.id
-            self.connections[player.currentRoom.id]['n'] = previous_room.id
-        if direction_moved == 'e' and 'e' in old_exits:
-            self.connections[previous_room.id]['e'] = player.currentRoom.id
-            self.connections[player.currentRoom.id]['w'] = previous_room.id
-        if direction_moved == 'w' and 'w' in old_exits:
-            self.connections[previous_room.id]['w'] = player.currentRoom.id
-            self.connections[player.currentRoom.id]['e'] = previous_room.id
-
-        # print(direction_moved, self.connections)
-
-    def travel_to_next(self, player):
-        # breadth first search
-        # should return a path of instructions ['n', 'n', 'e'] for example
-        # that the player can then use to travel
-        queue = [[{player.currentRoom.id: None}]]
-        print("queue: ", queue)
-        visited = []
-        print("visited: ", visited)
-
+    def path_to_next_q(self, room):  # Path like ['n', 'n'] to the closest ?
+        visited, queue = [], [[{room.id: None}]]
         while queue:
-            path = queue.pop(0)
-            print("  path: ", path, ", path[-1]:", path[-1])
-
-            address = path[-1].keys()
-            print("  address: ", address)
-
+            path = queue.pop(random.choice([0, len(queue)-1]))  # bfs or dfs
+            address = list(path[-1].keys())[0]
             if address not in visited:
-                for next_vert in self.connections[address]:
-                    print("    next_vert: ", next_vert)
+                for news in self.connections[address]:
                     new_path = list(path)
-                    print("    new_path: ", new_path)
-                    new_path.append({
-                        self.connections[address][next_vert]: next_vert})
-                    print("    new_path: ", new_path)
+                    new_path.append({self.connections[address][news]: news})
                     queue.append(new_path)
-                    print("    queue: ", queue)
-                    if self.connections[address][next_vert] == '?':
-                        return new_path[1:]
+                    if self.connections[address][news] == '?':
+                        return [list(step.values())[0] for step in new_path[1:]]
                 visited.append(address)
-                print("  visited: ", visited)
-        return -1
-
-    # def addConnection(self, currentRoomID, adjacentRoomID, direction):
-    #     """
-    #     Creates a bi-directional connection betwen rooms
-    #     """
-    #     if currentRoomID == adjacentRoomID:
-    #         print("WARNING: A room cannot be connected with itself")
-    #         return False
-    #     elif adjacentRoomID in self.connections[currentRoomID] or currentRoomID in self.connections[adjacentRoomID]:
-    #         print("WARNING: Connection already exists")
-    #         return False
-    #     else:
-    #         self.connections[currentRoomID].add(adjacentRoomID)
-    #         self.connections[adjacentRoomID].add(currentRoomID)
-    #         return True
-
-    # def addRoom(self, name):
-    #     """
-    #     Create a new room with a sequential integer ID
-    #     """
-    #     self.rooms[self.lastID] = User(name)
-    #     self.friendships[self.lastID] = set()
+        return False  # no '?'s left
 
 
-def TraverseAll(player):
-    # initialize the stack
-    known_rooms = TraversalGraph(player)
-    path = []
-    # find the closest place to travel to -- an unexplored '?'
-    short_path = known_rooms.travel_to_next(
-        player)  # returns a list of directions
-    # travel there
-    # path = ['s', 's', 'n', 'n', 'w', 'w', 'e',
-    #         'e', 'n', 'n', 's', 's', 'e', 'e']
-
-    # path = ['s', 's', 'n', 'n']
-
-    # path = ['n', 'n']
-    while short_path != -1:
-        print("eventual path: ", short_path)
-        # Re-Populate the TraversalGraph
-        # Repeat
-        i = 1
-        for step in short_path:
-            # print(i, "current position: ", player.currentRoom.id)
-            i += 1
+def traverse_all(player):
+    path, rooms = [], MapGraph(player.currentRoom)
+    s_path = rooms.path_to_next_q(player.currentRoom)
+    while s_path:  # Master app loop, while ? exist
+        for step in s_path:
             previous_room = player.currentRoom
             player.travel(step)
-            # print('position after move: ', player.currentRoom.id)
-            known_rooms.populate_known_areas(player, step, previous_room)
-            # print("_____")
-        path = path + short_path
-        short_path = known_rooms.travel_to_next(player)
-
+            rooms.populate_known_areas(player.currentRoom, step, previous_room)
+        path = path + s_path
+        s_path = rooms.path_to_next_q(player.currentRoom)
     return path
