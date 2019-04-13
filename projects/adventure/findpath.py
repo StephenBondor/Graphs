@@ -21,9 +21,8 @@ class MapGraph:
 
     def path_to_next_q(self, room):  # Path like ['n', 'n'] to the closest ?
         visited, arr = [], [[{room.id: None}]]
-        while arr:  # randomly choose bfs or dfs by weight: [8, 2] respectively
-            # path = arr.pop(choices([0, len(arr)-1], [8, 2])[0])
-            path = arr.pop(0)
+        while arr:
+            path = arr.pop(0)  # BFS only searching
             address = list(path[-1].keys())[0]
             if address not in visited:
                 for news in self.cxn[address]:
