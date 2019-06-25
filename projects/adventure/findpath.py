@@ -1,4 +1,4 @@
-from random import choices, choice, random
+from random import random
 
 
 class MapGraph:
