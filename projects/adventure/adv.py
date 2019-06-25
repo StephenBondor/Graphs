@@ -31,7 +31,7 @@ world.printRooms()
 
 # FILL THIS IN
 time_start = time.time()
-i = 100000 # was doing 100000
+i = 100000
 minimum = ['i']*1000
 while i > 0:
 	player = Player("Name", world.startingRoom)
